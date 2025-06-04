@@ -25,8 +25,13 @@ slist = page.split("\n")
 saleslist = []
 
 for row in slist:
+    if not row.strip():
+        continue
     row = row.split(",")
     saleslist.append(row)
+
+if saleslist and not saleslist[0][0].isdigit():
+    saleslist = saleslist[1:]
 
 with open(args.t) as f:
     page = f.read()
@@ -35,8 +40,13 @@ tlist = page.split("\n")
 teamlist = []
 
 for row in tlist:
+    if not row.strip():
+        continue
     row = row.split(",")
     teamlist.append(row)
+
+if teamlist and not teamlist[0][0].isdigit():
+    teamlist = teamlist[1:]
 
 with open(args.p) as f:
     page = f.read()
@@ -45,15 +55,20 @@ plist = page.split("\n")
 productlist = []
 
 for row in plist:
+    if not row.strip():
+        continue
     row = row.split(",")
     productlist.append(row)
 
+if productlist and not productlist[0][0].isdigit():
+    productlist = productlist[1:]
+
 teamnamemap = {}
-for i in range(1, len(teamlist)):
+for i in range(len(teamlist)):
     teamnamemap[teamlist[i][0]] = teamlist[i][1]
 
 teamsummap = {}
-for i in range(1, len(teamlist)):
+for i in range(len(teamlist)):
     teamsummap[teamlist[i][1]] = 0
 
 
@@ -62,15 +77,15 @@ for i in range(0, len(productlist)):
     productnamemap[productlist[i][0]] = productlist[i][1]
         
 productsummap = {}
-for i in range(0, len(teamlist)):
+for i in range(len(productlist)):
     productsummap[productlist[i][1]] = 0
       
 discountmap = {}
-for i in range(0, len(teamlist)):
+for i in range(len(productlist)):
     discountmap[productlist[i][1]] = 0
 
 unitsmap = {}
-for i in range(0, len(teamlist)):
+for i in range(len(productlist)):
     unitsmap[productlist[i][1]] = 0
 
 for row in saleslist:
@@ -83,7 +98,7 @@ for row in saleslist:
 
 
 header = ["Team", "Gross Revenue"]
-data = [ [teamlist[i][1],teamsummap[teamlist[i][1]]] for i in range(1,len(teamlist))]
+data = [[teamlist[i][1], teamsummap[teamlist[i][1]]] for i in range(len(teamlist))]
 
 with open(args.team_report, 'w+') as f:
     writer = csv.writer(f)
